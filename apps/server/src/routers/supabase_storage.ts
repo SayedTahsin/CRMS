@@ -1,6 +1,15 @@
 import { supabase } from "@/lib/supabase-server"
 import { protectedProcedure, router } from "@/lib/trpc"
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { z } from "zod"
+
+const BUCKET = "pdf"
 
 export const supabaseRouter = router({
   uploadFile: protectedProcedure
@@ -16,29 +25,25 @@ export const supabaseRouter = router({
       const { name, type, base64, courseName } = input
       const username = ctx.session.user.id
       const buffer = Buffer.from(base64.split(",")[1], "base64")
-
       const filePath = `${courseName}/user-${username}/${Date.now()}-${name}`
 
-      const { error: uploadError } = await supabase.storage
-        .from("pdf")
-        .upload(filePath, buffer, {
-          contentType: type,
-        })
+      await supabase.send(
+        new PutObjectCommand({
+          Bucket: BUCKET,
+          Key: filePath,
+          Body: buffer,
+          ContentType: type,
+        }),
+      )
 
-      if (uploadError) {
-        throw new Error(`Upload failed: ${uploadError.message}`)
-      }
-
-      const { data, error: urlError } = await supabase.storage
-        .from("pdf")
-        .createSignedUrl(filePath, 60 * 60)
-
-      if (urlError || !data?.signedUrl) {
-        throw new Error("Failed to generate signed URL")
-      }
+      const signedUrl = await getSignedUrl(
+        supabase,
+        new GetObjectCommand({ Bucket: BUCKET, Key: filePath }),
+        { expiresIn: 3600 },
+      )
 
       return {
-        url: data.signedUrl,
+        url: signedUrl,
         path: filePath,
         originalName: name,
       }
@@ -46,44 +51,53 @@ export const supabaseRouter = router({
 
   listFiles: protectedProcedure.query(async ({ ctx }) => {
     const username = ctx.session.user.id
+    const prefix = "" // base directory
 
-    const { data: folders, error: folderError } = await supabase.storage
-      .from("pdf")
-      .list("", { limit: 100 })
+    const listAllCourses = await supabase.send(
+      new ListObjectsV2Command({
+        Bucket: BUCKET,
+        Prefix: "",
+        Delimiter: "/",
+      }),
+    )
 
-    if (folderError) {
-      throw new Error(`Failed to list course folders: ${folderError.message}`)
-    }
+    const coursePrefixes = new Set<string>()
+    listAllCourses.Contents?.forEach((obj) => {
+      const parts = obj.Key?.split("/") || []
+      if (parts.length >= 2 && parts[1] === `user-${username}`) {
+        coursePrefixes.add(parts[0])
+      }
+    })
 
     const allFiles = await Promise.all(
-      folders.map(async (folder) => {
-        const courseName = folder.name
-        const folderPath = `${courseName}/user-${username}`
+      Array.from(coursePrefixes).map(async (courseName) => {
+        const userPrefix = `${courseName}/user-${username}/`
 
-        const { data: files, error } = await supabase.storage
-          .from("pdf")
-          .list(folderPath, {
-            limit: 100,
-            sortBy: { column: "created_at", order: "desc" },
-          })
+        const result = await supabase.send(
+          new ListObjectsV2Command({
+            Bucket: BUCKET,
+            Prefix: userPrefix,
+          }),
+        )
 
-        if (error) return []
+        const files = result.Contents ?? []
 
         return await Promise.all(
           files.map(async (file) => {
-            const fullPath = `${folderPath}/${file.name}`
-            const { data: signed, error: signedErr } = await supabase.storage
-              .from("pdf")
-              .createSignedUrl(fullPath, 3600)
+            const signedUrl = await getSignedUrl(
+              supabase,
+              new GetObjectCommand({ Bucket: BUCKET, Key: file.Key }),
+              { expiresIn: 3600 },
+            )
 
             return {
-              name: file.name,
-              signedUrl: signed?.signedUrl ?? null,
-              path: fullPath,
+              name: file.Key?.split("/").pop() ?? "",
+              signedUrl,
+              path: file.Key,
               course: courseName,
-              createdAt: file.metadata?.created_at ?? null,
-              size: file.metadata?.size ?? null,
-              error: signedErr?.message ?? null,
+              createdAt: file.LastModified?.toISOString() ?? null,
+              size: file.Size ?? null,
+              error: null,
             }
           }),
         )
@@ -99,16 +113,16 @@ export const supabaseRouter = router({
       const { path } = input
       const expectedPrefix = `user-${ctx.session.user.id}`
 
-      // security check to ensure the user can only delete their own file
       if (!path.includes(expectedPrefix)) {
         throw new Error("You are not authorized to delete this file.")
       }
 
-      const { error } = await supabase.storage.from("pdf").remove([path])
-
-      if (error) {
-        throw new Error(`Failed to delete file: ${error.message}`)
-      }
+      await supabase.send(
+        new DeleteObjectCommand({
+          Bucket: BUCKET,
+          Key: path,
+        }),
+      )
 
       return { success: true }
     }),
@@ -124,71 +138,54 @@ export const supabaseRouter = router({
     .query(async ({ input }) => {
       const { courseName, page, limit } = input
 
-      // Step 1: List courses (filtered if needed)
-      const { data: allCourses, error: courseError } = await supabase.storage
-        .from("pdf")
-        .list("", { limit: 100 })
+      const listResult = await supabase.send(
+        new ListObjectsV2Command({
+          Bucket: BUCKET,
+          Prefix: courseName ? `${courseName}/` : "",
+        }),
+      )
 
-      if (courseError)
-        throw new Error(`Failed to list courses: ${courseError.message}`)
+      const allFiles = listResult.Contents ?? []
 
-      const filteredCourses = courseName
-        ? allCourses.filter((c) => c.name === courseName)
-        : allCourses
+      const filtered = allFiles.filter((file) => {
+        if (!file.Key) return false
+        return file.Key.split("/").length === 3 // course/user/filename
+      })
 
-      const files = []
+      const formatted = await Promise.all(
+        filtered.map(async (file) => {
+          const parts = file.Key?.split("/")
+          const course = parts[0]
+          const uploadedBy = parts[1]
+          const name = parts[2]
 
-      for (const course of filteredCourses) {
-        const courseName = course.name
+          const signedUrl = await getSignedUrl(
+            supabase,
+            new GetObjectCommand({ Bucket: BUCKET, Key: file.Key }),
+            { expiresIn: 3600 },
+          )
 
-        // Step 2: Get user folders inside course
-        const { data: userFolders, error: userError } = await supabase.storage
-          .from("pdf")
-          .list(courseName, { limit: 100 })
-
-        if (userError) continue
-
-        for (const userFolder of userFolders) {
-          const userPath = `${courseName}/${userFolder.name}`
-
-          const { data: userFiles, error: fileError } = await supabase.storage
-            .from("pdf")
-            .list(userPath, {
-              limit: 100,
-              sortBy: { column: "created_at", order: "desc" },
-            })
-
-          if (fileError) continue
-
-          for (const file of userFiles) {
-            const path = `${userPath}/${file.name}`
-
-            const { data: signed, error: signedErr } = await supabase.storage
-              .from("pdf")
-              .createSignedUrl(path, 3600)
-
-            files.push({
-              course: courseName,
-              uploadedBy: userFolder.name,
-              name: file.name,
-              path,
-              signedUrl: signed?.signedUrl ?? null,
-              createdAt: file.metadata?.created_at ?? null,
-              size: file.metadata?.size ?? null,
-              error: signedErr?.message ?? null,
-            })
+          return {
+            course,
+            uploadedBy,
+            name,
+            path: file.Key,
+            signedUrl,
+            createdAt: file.LastModified?.toISOString() ?? null,
+            size: file.Size ?? null,
+            error: null,
           }
-        }
-      }
+        }),
+      )
 
       const start = (page - 1) * limit
-      const paginated = files.slice(start, start + limit)
+      const paginated = formatted.slice(start, start + limit)
 
       return {
         data: paginated,
-        total: files.length,
+        total: formatted.length,
         page,
-        totalPages: Math.ceil(files.length / limit),
+        totalPages: Math.ceil(formatted.length / limit),
       }
     }),
 })

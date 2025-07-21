@@ -1,6 +1,11 @@
-import { createClient } from "@supabase/supabase-js"
+import { S3Client } from "@aws-sdk/client-s3"
 
-export const supabase = createClient(
-  process.env.SUPABASE_URL ?? "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
-)
+export const supabase = new S3Client({
+  forcePathStyle: true,
+  region: process.env.region || "",
+  endpoint: process.env.endpoint_url || "",
+  credentials: {
+    accessKeyId: process.env.aws_access_key_id || "",
+    secretAccessKey: process.env.aws_secret_access_key || "",
+  },
+})
