@@ -27,16 +27,16 @@ function ResourcesTab() {
       },
       onError: (error: unknown) => {
         toast.error(
-          `Delete failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          `Delete failed: ${error instanceof Error ? error.message : "Unknown error"}`
         )
       },
-    }),
+    })
   )
 
   const handleDelete = (path: string) => {
     if (window.confirm("Are you sure you want to delete this file?")) {
       setDeletingFilePath(path)
-      deleteFileMutation.mutate({ path })
+      deleteFileMutation.mutate({ path } as any)
     }
   }
 

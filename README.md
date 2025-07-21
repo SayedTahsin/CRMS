@@ -29,7 +29,7 @@ Ideal for schools, universities, or teams building robust, role-aware class sche
 - 📅 Slot × Date Matrix – intuitive view of classes and gaps  
 - 📊 Class history analytics – track per teacher, section, or room  
 - 📨 Email verification & password reset via Resend  
-- 🗂️ Resource Management – Upload, view, and delete files with secure Supabase Storage
+- 🗂️ Resource Management – Upload, view, and delete files with secure Supabase Storage (S3 compatible)
 - ⚡ Blazing-fast dev environment with Bun and SQLite  
 - 🧩 Modular architecture – clean, scalable, and maintainable  
 
@@ -53,7 +53,7 @@ Ideal for schools, universities, or teams building robust, role-aware class sche
 - **tRPC** – Typesafe APIs without REST or GraphQL  
 - **Drizzle ORM** – SQL-first, type-safe database access  
 - **SQLite / Turso** – Lightweight, local and edge-friendly database  
-- **Supabase Storage** – Secure, signed file uploads per user and course
+- **Supabase Storage** – Secure, signed file uploads per user and course (S3 compatible)
 - **Bun** – Fast JavaScript/TypeScript runtime with native TS support  
 
 ### 🔐 Authentication & Access Control
@@ -126,7 +126,7 @@ Go to [resend.com](https://resend.com) and update SMTP credentials in your `.env
 ### Supabase setup
 - Go to Supbase and create a new project.
 - Create a new bucket in the storage tab. and name it `pdf`
-- Get service role key and upadate `.env` file (see `.env.example` for reference)
+- Go to Storage Setting and get S3 Connect URL, region, access-keys and upadate `.env` file (see `.env.example` for reference)
 
 ### Run the development server
 Go to root directory and run: 

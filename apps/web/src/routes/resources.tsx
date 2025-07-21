@@ -7,7 +7,7 @@ import { trpc } from "@/utils/trpc"
 import { useQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { ExternalLinkIcon } from "lucide-react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 export const Route = createFileRoute("/resources")({
   component: RouteComponent,
@@ -43,16 +43,25 @@ function RouteComponent() {
         courseName: selectedCourse || undefined,
         page: 1,
         limit: 100,
-      }),
+      })
     )
 
-  const courseNames = Array.from(
-    new Set(allResources.data.map((res) => res.course)),
-  ).sort()
+  const initialCourseNamesRef = useRef<string[] | null>(null)
+
+  if (
+    initialCourseNamesRef.current === null &&
+    selectedCourse === "" &&
+    allResources.data.length > 0
+  ) {
+    initialCourseNamesRef.current = Array.from(
+      new Set(allResources.data.map((res) => res.course))
+    ).sort()
+  }
+
+  const courseNames = initialCourseNamesRef.current ?? []
 
   return (
     <div className=" max-full space-y-6 p-4">
-      {/* Filter Section */}
       <div className="flex flex-wrap items-center gap-3">
         <label htmlFor="course-select" className="font-medium text-sm">
           Filter by Course:
@@ -73,7 +82,6 @@ function RouteComponent() {
         </select>
       </div>
 
-      {/* Resource List */}
       <Card>
         <CardContent className="space-y-4 py-4">
           <h2 className="font-semibold text-lg">All Uploaded Resources</h2>
@@ -95,7 +103,7 @@ function RouteComponent() {
                     <div className="flex-1 truncate">
                       <div className="truncate font-medium">{file.name}</div>
                       <div className="text-muted-foreground text-xs">
-                        {file.course} — {file.uploadedBy}
+                        {file.course}
                       </div>
                     </div>
 

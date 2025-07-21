@@ -18,12 +18,13 @@ export const FileUploadCell = ({
   onUploaded,
 }: FileUploadCellProps) => {
   const [file, setFile] = useState<File | null>(null)
+  const [ExplicitFileName, setExplicitFileName] = useState<string>("")
   const [preview, setPreview] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState<string>("")
 
   const { data: coursesResult = { data: [] } } = useQuery(
-    trpc.course.getAll.queryOptions(),
+    trpc.course.getAll.queryOptions()
   )
 
   const uploadFileMutation = useMutation(
@@ -36,13 +37,13 @@ export const FileUploadCell = ({
       onError: (err: unknown) => {
         toast.error(handleErrorMsg(err, { fallbackMessage: "Upload failed" }))
       },
-    }),
+    })
   )
 
   const handleUpload = async () => {
     if (!file) return toast.error("Please select a file first")
     if (!selectedCourse) return toast.error("Please select a course")
-
+    const fileName = ExplicitFileName || file.name
     const reader = new FileReader()
     reader.onload = async () => {
       try {
@@ -50,11 +51,11 @@ export const FileUploadCell = ({
         const base64 = reader.result as string
 
         await uploadFileMutation.mutateAsync({
-          name: file.name,
+          name: fileName,
           type: file.type,
           base64,
           courseName: selectedCourse,
-        })
+        } as any)
       } catch (err) {
         console.error(err)
       } finally {
@@ -67,8 +68,19 @@ export const FileUploadCell = ({
 
   return (
     <div className="flex flex-col gap-4 text-sm">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-        <div className="flex w-full flex-col gap-1 sm:w-1/2">
+      <div className="flex flex-wrap items-end gap-4">
+        <div className="flex min-w-[200px] flex-1 flex-col gap-1">
+          <label htmlFor="fileTitle" className="font-medium text-sm">
+            Filename
+          </label>
+          <Input
+            id="fileTitle"
+            value={ExplicitFileName}
+            onChange={(e) => setExplicitFileName(e.target.value)}
+          />
+        </div>
+
+        <div className="flex min-w-[200px] flex-1 flex-col gap-1">
           <label htmlFor="upload" className="font-medium text-sm">
             {label}
           </label>
@@ -81,7 +93,7 @@ export const FileUploadCell = ({
           />
         </div>
 
-        <div className="flex w-full flex-col gap-1 sm:w-1/2">
+        <div className="flex min-w-[200px] flex-1 flex-col gap-1">
           <label htmlFor="course-select" className="font-medium text-sm">
             Select Course
           </label>
