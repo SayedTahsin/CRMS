@@ -114,9 +114,14 @@ cd apps/server && bun db:local
 bun db:generate
 bun db:push
 ```
-4. Populate `role`, `role_permission` & `permission` tables with the JSON's inside `/apps/server/src/db/important-data` folder. 
+4. Populate data with `dizzle-seed`. 
 
-5. Assign `SuperAdmin` role to the user you want to make SuperAdmin in `user_role` table. And update that user's roleId in `user` Table to `SuperAdmin`.
+```bash
+bun db:generate
+bun db:seed
+```
+
+5. Sign up a user and manually assign them the SuperAdmin role by setting their roleId to `r1`. Also, insert a new entry into the `user_role` table with the user's ID and roleId set to `r1`.
 
 6. Read the API_PERMISSION Doc `/apps/server/src/routers/API_PERMISSION_REQUIREMENTS.md` for understanding the permissions.
 
@@ -189,12 +194,28 @@ react-tanstack-router-hono-drizzle/
 
 ## Available Scripts
 
-- `bun dev`: Start all applications in development mode
-- `bun build`: Build all applications
-- `bun dev:web`: Start only the web application
-- `bun dev:server`: Start only the server
-- `bun check-types`: Check TypeScript types across all apps
-- `bun db:push`: Push schema changes to database
-- `bun db:studio`: Open database studio UI
-- `cd apps/server && bun db:local`: Start the local SQLite database
-- `bun check`: Run Biome formatting and linting
+- `npm run dev`: Start all applications in development mode (via Turbo)
+- `npm run dev:web`: Start only the web application
+- `npm run dev:server`: Start only the server application
+- `npm run dev:native`: Start only the native application (if applicable)
+
+- `npm run build`: Build all applications
+- `npm run build:web`: Build only the web application
+- `npm run build:server`: Build only the server application
+
+- `npm run start:web`: Start the web application
+- `npm run start:server`: Start the server application
+
+- `npm run check-types`: Check TypeScript types across all applications
+- `npm run check-types:web`: Check types only in the web application
+- `npm run check-types:server`: Check types only in the server application
+
+- `npm run db:push`: Push schema changes to the database
+- `npm run db:seed`: Seed the database
+- `npm run db:studio`: Open the database studio UI
+- `npm run db:migrate`: Run database migrations
+- `npm run db:generate`: Generate database types and files
+
+- `cd apps/server && bun db:local`: Start the local SQLite database (direct command)
+
+- `npm run check`: Run Biome formatting and linting across all applications

@@ -1,1 +1,132 @@
-[{"id":"01JZ0XV1ZGW4VHSJW0HRDR501S","name":"*","description":"Full Access","created_at":1751304210416,"updated_at":1751304210416,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y4R2R0QB71W89X8ZBJCZD","name":"course:create_update","description":null,"created_at":1751304527960,"updated_at":1751304527960,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y59S3BK3D8ABF01VQNKPW","name":"section:create_update","description":null,"created_at":1751304546083,"updated_at":1751304546083,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y5QWDT4DRPAHE18SZA5TV","name":"class_schedule:update","description":null,"created_at":1751304560525,"updated_at":1751304560525,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y62FJAQE44FSJAC4J77V8","name":"class_schedule:create","description":null,"created_at":1751304571378,"updated_at":1751304571378,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y6A9498BE6DFS7XRQ3Y3D","name":"class_schedule:update_own","description":null,"created_at":1751304579364,"updated_at":1751304579364,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y6K5Y6X7R398Y78NXNJ8W","name":"slot:create_update","description":null,"created_at":1751304588478,"updated_at":1751304588478,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y92WD60HDHGXWKN4RWWK7","name":"user:filter_update_viewAll","description":null,"created_at":1751304670093,"updated_at":1751304670093,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0YB02SC407RC14Z0PRS65N","name":"class_history:create","description":null,"created_at":1751304732761,"updated_at":1751304732761,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0YBBZK3S4EZY1JQS1FR9P4","name":"class_history:update","description":null,"created_at":1751304744946,"updated_at":1751304744946,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0YBKWCQJB7D0BDRAKR7X4P","name":"class_history:update_own","description":null,"created_at":1751304753036,"updated_at":1751304753036,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0YBX5ZT7RB3EHSXJ5NHQAN","name":"class_history:update_own_section","description":null,"created_at":1751304762558,"updated_at":1751304762558,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0YC8FMY58GHQWFKH53XHD8","name":"room:create_update","description":null,"created_at":1751304774132,"updated_at":1751304774132,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null}]
+[
+	{
+		"id": "01JZ0XV1ZGW4VHSJW0HRDR501S",
+		"name": "*",
+		"description": "Full Access",
+		"created_at": 1751304210416,
+		"updated_at": 1751304210416,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y4R2R0QB71W89X8ZBJCZD",
+		"name": "course:create_update",
+		"description": null,
+		"created_at": 1751304527960,
+		"updated_at": 1751304527960,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y59S3BK3D8ABF01VQNKPW",
+		"name": "section:create_update",
+		"description": null,
+		"created_at": 1751304546083,
+		"updated_at": 1751304546083,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y5QWDT4DRPAHE18SZA5TV",
+		"name": "class_schedule:update",
+		"description": null,
+		"created_at": 1751304560525,
+		"updated_at": 1751304560525,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y62FJAQE44FSJAC4J77V8",
+		"name": "class_schedule:create",
+		"description": null,
+		"created_at": 1751304571378,
+		"updated_at": 1751304571378,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y6A9498BE6DFS7XRQ3Y3D",
+		"name": "class_schedule:update_own",
+		"description": null,
+		"created_at": 1751304579364,
+		"updated_at": 1751304579364,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y6K5Y6X7R398Y78NXNJ8W",
+		"name": "slot:create_update",
+		"description": null,
+		"created_at": 1751304588478,
+		"updated_at": 1751304588478,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y92WD60HDHGXWKN4RWWK7",
+		"name": "user:filter_update_viewAll",
+		"description": null,
+		"created_at": 1751304670093,
+		"updated_at": 1751304670093,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0YB02SC407RC14Z0PRS65N",
+		"name": "class_history:create",
+		"description": null,
+		"created_at": 1751304732761,
+		"updated_at": 1751304732761,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0YBBZK3S4EZY1JQS1FR9P4",
+		"name": "class_history:update",
+		"description": null,
+		"created_at": 1751304744946,
+		"updated_at": 1751304744946,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0YBKWCQJB7D0BDRAKR7X4P",
+		"name": "class_history:update_own",
+		"description": null,
+		"created_at": 1751304753036,
+		"updated_at": 1751304753036,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0YBX5ZT7RB3EHSXJ5NHQAN",
+		"name": "class_history:update_own_section",
+		"description": null,
+		"created_at": 1751304762558,
+		"updated_at": 1751304762558,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0YC8FMY58GHQWFKH53XHD8",
+		"name": "room:create_update",
+		"description": null,
+		"created_at": 1751304774132,
+		"updated_at": 1751304774132,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	}
+]

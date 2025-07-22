@@ -1,1 +1,52 @@
-[{"id":"01JZ0Y34ZK1E2A34889WBJC3CK","name":"Chairman","description":"Chairman of the department","created_at":1751304475634,"updated_at":1751304475634,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y3CFFTHE4BAQRA1SMHQK5","name":"Teacher","description":null,"created_at":1751304483311,"updated_at":1751304483311,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"01JZ0Y3SZKGNDWAB5GSEAQ0TQH","name":"CR","description":"Class Representative","created_at":1751304497139,"updated_at":1751304497139,"deleted_at":null,"updated_by":"VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF","deleted_by":null},{"id":"r1","name":"SuperAdmin","description":null,"created_at":1751300283,"updated_at":1751300283,"deleted_at":null,"updated_by":null,"deleted_by":null},{"id":"r2","name":"Student","description":null,"created_at":1751300303,"updated_at":1751300303,"deleted_at":null,"updated_by":null,"deleted_by":null}]
+[
+	{
+		"id": "01JZ0Y34ZK1E2A34889WBJC3CK",
+		"name": "Chairman",
+		"description": "Chairman of the department",
+		"created_at": 1751304475634,
+		"updated_at": 1751304475634,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y3CFFTHE4BAQRA1SMHQK5",
+		"name": "Teacher",
+		"description": null,
+		"created_at": 1751304483311,
+		"updated_at": 1751304483311,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "01JZ0Y3SZKGNDWAB5GSEAQ0TQH",
+		"name": "CR",
+		"description": "Class Representative",
+		"created_at": 1751304497139,
+		"updated_at": 1751304497139,
+		"deleted_at": null,
+		"updated_by": "VDA5rmG4F2SRGeSfrCFMttFsmrdYWmAF",
+		"deleted_by": null
+	},
+	{
+		"id": "r1",
+		"name": "SuperAdmin",
+		"description": null,
+		"created_at": 1751300283,
+		"updated_at": 1751300283,
+		"deleted_at": null,
+		"updated_by": null,
+		"deleted_by": null
+	},
+	{
+		"id": "r2",
+		"name": "Student",
+		"description": null,
+		"created_at": 1751300303,
+		"updated_at": 1751300303,
+		"deleted_at": null,
+		"updated_by": null,
+		"deleted_by": null
+	}
+]

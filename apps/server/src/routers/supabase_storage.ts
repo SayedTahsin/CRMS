@@ -61,6 +61,7 @@ export const supabaseRouter = router({
       }),
     )
     const coursePrefixes = new Set<string>()
+    // biome-ignore lint/complexity/noForEach: <explanation>
     listAllCourses.CommonPrefixes?.forEach((obj) => {
       coursePrefixes.add(obj.Prefix || "")
     })

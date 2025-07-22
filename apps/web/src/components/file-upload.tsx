@@ -24,7 +24,7 @@ export const FileUploadCell = ({
   const [selectedCourse, setSelectedCourse] = useState<string>("")
 
   const { data: coursesResult = { data: [] } } = useQuery(
-    trpc.course.getAll.queryOptions()
+    trpc.course.getAll.queryOptions(),
   )
 
   const uploadFileMutation = useMutation(
@@ -37,7 +37,7 @@ export const FileUploadCell = ({
       onError: (err: unknown) => {
         toast.error(handleErrorMsg(err, { fallbackMessage: "Upload failed" }))
       },
-    })
+    }),
   )
 
   const handleUpload = async () => {
@@ -55,6 +55,7 @@ export const FileUploadCell = ({
           type: file.type,
           base64,
           courseName: selectedCourse,
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         } as any)
       } catch (err) {
         console.error(err)
