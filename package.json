@@ -4,13 +4,22 @@
 	"workspaces": ["apps/*"],
 	"scripts": {
 		"dev": "turbo dev",
-		"build": "turbo build",
-		"check-types": "turbo check-types",
 		"dev:native": "turbo -F native dev",
 		"dev:web": "turbo -F web dev",
 		"dev:server": "turbo -F server dev",
+
+		"build": "turbo build",
+		"build:web": "turbo -F web build",
+		"build:server": "turbo -F server build",
+
+		"check-types": "turbo check-types",
+		"check-types:web": "turbo -F web check-types",
+		"check-types:server": "turbo -F server check-types",
+
 		"db:push": "turbo -F server db:push",
 		"db:studio": "turbo -F server db:studio",
+		"db:seed": "turbo -F server db:seed",
+
 		"check": "biome check --write ."
 	},
 	"devDependencies": {
@@ -25,8 +34,5 @@
 		]
 	},
 	"packageManager": "bun@1.2.10",
-	"dependencies": {
-		"@aws-sdk/client-s3": "^3.848.0",
-		"@aws-sdk/s3-request-presigner": "^3.848.0"
-	}
+	"dependencies": {}
 }

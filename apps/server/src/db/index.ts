@@ -8,3 +8,4 @@ const client = createClient({
 client.execute("PRAGMA foreign_keys=ON;")
 
 export const db = drizzle({ client })
+export type db = typeof db

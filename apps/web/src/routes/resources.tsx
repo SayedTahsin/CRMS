@@ -43,7 +43,7 @@ function RouteComponent() {
         courseName: selectedCourse || undefined,
         page: 1,
         limit: 100,
-      })
+      }),
     )
 
   const initialCourseNamesRef = useRef<string[] | null>(null)
@@ -54,7 +54,7 @@ function RouteComponent() {
     allResources.data.length > 0
   ) {
     initialCourseNamesRef.current = Array.from(
-      new Set(allResources.data.map((res) => res.course))
+      new Set(allResources.data.map((res) => res.course)),
     ).sort()
   }
 
