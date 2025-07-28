@@ -7,8 +7,8 @@ import { userRole } from "@/db/schema/pbac"
 import { room } from "@/db/schema/room"
 import { section } from "@/db/schema/section"
 import { slot } from "@/db/schema/slot"
+import { faker } from "@faker-js/faker"
 import { createId } from "../src/lib/helpers/createId"
-
 const now = new Date()
 
 export async function seedSections(db: db) {
@@ -207,22 +207,26 @@ export async function seedUsersAndAccounts(
   const userRoleList = []
 
   let userIdx = 1
+
   for (const role of roles) {
     if (role.name === "SuperAdmin") continue
+
     if (role.name === "Chairman") {
       const uid = createId()
+      const fullName = faker.person.fullName()
+      const email = faker.internet.email({ firstName: fullName.split(" ")[0] })
       userList.push({
         id: uid,
-        name: "Tanvir Hossain",
-        email: "tanvirhossain@gmail.com",
+        name: fullName,
+        email,
         emailVerified: true,
         roleId: role.id,
         createdAt: now,
         updatedAt: now,
-        username: "tanvirhossain541",
-        phone: `01700000${userIdx.toString().padStart(3, "0")}`,
+        username: faker.internet.displayName(),
+        phone: faker.phone.number({ style: "national" }),
         sectionId: null,
-        image: null,
+        image: faker.image.avatar(),
         updatedBy: null,
         deletedBy: null,
         deletedAt: null,
@@ -237,23 +241,29 @@ export async function seedUsersAndAccounts(
       })
       userRoleList.push({ userId: uid, roleId: role.id })
     }
-    if (role.name === "Student") {
+
+    if (role.name === "Student" || role.name === "CR") {
       for (const section of sections) {
-        for (let i = 0; i < 20; i++) {
-          // 20 students per section
+        const count = role.name === "Student" ? 20 : 1 // 20 students, 1 CR per section
+        for (let i = 0; i < count; i++) {
           const uid = createId()
+          const fullName = faker.person.fullName()
+          const email = faker.internet.email({
+            firstName: fullName.split(" ")[0],
+          })
+
           userList.push({
             id: uid,
-            name: `${role.name} ${section.name} ${userIdx}`,
-            email: `${role.name.toLowerCase()}${userIdx}@example.com`,
+            name: fullName,
+            email,
             emailVerified: true,
             roleId: role.id,
             createdAt: now,
             updatedAt: now,
-            username: `${role.name.toLowerCase()}${userIdx}`,
-            phone: `01700000${userIdx.toString().padStart(3, "0")}`,
+            username: faker.internet.displayName(),
+            phone: faker.phone.number({ style: "national" }),
             sectionId: section.id,
-            image: null,
+            image: faker.image.avatar(),
             updatedBy: null,
             deletedBy: null,
             deletedAt: null,
@@ -271,55 +281,27 @@ export async function seedUsersAndAccounts(
         }
       }
     }
-    if (role.name === "CR") {
-      for (const section of sections) {
-        for (let i = 0; i < 1; i++) {
-          // 1 CR per section
-          const uid = createId()
-          userList.push({
-            id: uid,
-            name: `${role.name} ${section.name} ${userIdx}`,
-            email: `${role.name.toLowerCase()}${userIdx}@example.com`,
-            emailVerified: true,
-            roleId: role.id,
-            createdAt: now,
-            updatedAt: now,
-            username: `${role.name.toLowerCase()}${userIdx}`,
-            phone: `01700000${userIdx.toString().padStart(3, "0")}`,
-            sectionId: section.id,
-            image: null,
-            updatedBy: null,
-            deletedBy: null,
-            deletedAt: null,
-          })
-          accountList.push({
-            id: createId(),
-            accountId: uid,
-            providerId: "local",
-            userId: uid,
-            createdAt: now,
-            updatedAt: now,
-          })
-          userRoleList.push({ userId: uid, roleId: role.id })
-          userIdx++
-        }
-      }
-    }
+
     if (role.name === "Teacher") {
       for (let i = 0; i < sections.length + 5; i++) {
         const uid = createId()
+        const fullName = faker.person.fullName()
+        const email = faker.internet.email({
+          firstName: fullName.split(" ")[0],
+        })
+
         userList.push({
           id: uid,
-          name: `${role.name} ${userIdx}`,
-          email: `${role.name.toLowerCase()}${userIdx}@example.com`,
+          name: fullName,
+          email,
           emailVerified: true,
           roleId: role.id,
           createdAt: now,
           updatedAt: now,
-          username: `${role.name.toLowerCase()}${userIdx}`,
-          phone: `01700000${userIdx.toString().padStart(3, "0")}`,
+          username: faker.internet.displayName(),
+          phone: faker.phone.number({ style: "national" }),
           sectionId: null,
-          image: null,
+          image: faker.image.avatar(),
           updatedBy: null,
           deletedBy: null,
           deletedAt: null,
@@ -337,12 +319,13 @@ export async function seedUsersAndAccounts(
       }
     }
   }
+
   await db.insert(user).values(userList)
   await db.insert(account).values(accountList)
   await db.insert(userRole).values(userRoleList)
+
   return userList
 }
-
 type Weekday =
   | "monday"
   | "tuesday"
@@ -414,53 +397,77 @@ export async function seedClassSchedule(
     deletedBy: string | null
     deletedAt: Date | null
   }[],
+  roles: {
+    id: string
+    name: string
+    // any other fields if present
+  }[],
 ) {
-  // Generate random class schedules
+  // Find the teacher role from roles
+  const teacherRole = roles?.find((role) => role.name === "Teacher")
+  if (!teacherRole) throw new Error("Teacher role not found")
+
+  // Filter users who have the teacher roleId
+  const teacherList = users.filter((u) => u.roleId === teacherRole.id)
+
+  if (teacherList.length === 0) throw new Error("No teachers found")
+
   const scheduleList: InsertClassSchedule[] = []
   const days: Weekday[] = [
     "monday",
     "tuesday",
     "wednesday",
-    "thursday",
-    "friday",
     "saturday",
     "sunday",
   ]
-  const teacherList = users.filter((u) => u.name.startsWith("Teacher"))
 
-  if (teacherList.length === 0) throw new Error("No teachers found")
+  const scheduleSetRoom = new Set<string>()
+  const scheduleSetTeacher = new Set<string>()
+  const scheduleSetSection = new Set<string>()
 
-  let scheduleIdx = 0
+  let retries = 0
+  const maxRetries = 20000
 
-  for (const section of sections) {
-    for (const slot of slots) {
-      const course = courses[(scheduleIdx + slot.slotNumber) % courses.length]
-      const room = rooms[(scheduleIdx + slot.slotNumber) % rooms.length]
-      const teacher = teacherList[scheduleIdx % teacherList.length]
-      const randomDay = days[Math.floor(Math.random() * days.length)]
-      const isDuplicate = scheduleList.some(
-        (s) =>
-          s.day === randomDay &&
-          s.slotId === slot.id &&
-          s.teacherId === teacher.id,
-      )
-      if (isDuplicate) continue
+  while (scheduleList.length < 500 && retries < maxRetries) {
+    retries++
 
-      scheduleList.push({
-        id: createId(),
-        day: randomDay,
-        slotId: slot.id,
-        sectionId: section.id,
-        courseId: course.id,
-        teacherId: teacher.id,
-        roomId: room.id,
-        createdAt: now,
-        updatedAt: now,
-      })
+    const section = sections[Math.floor(Math.random() * sections.length)]
+    const slot = slots[Math.floor(Math.random() * slots.length)]
+    const course = courses[Math.floor(Math.random() * courses.length)]
+    const room = rooms[Math.floor(Math.random() * rooms.length)]
+    const teacher = teacherList[Math.floor(Math.random() * teacherList.length)]
+    const day = days[Math.floor(Math.random() * days.length)]
 
-      scheduleIdx++
+    const keyRoom = `${day}-${slot.id}-${room.id}`
+    const keyTeacher = `${day}-${slot.id}-${teacher.id}`
+    const keySection = `${day}-${slot.id}-${section.id}`
+
+    // Check uniqueness constraints for room, teacher, and section per day and slot
+    if (
+      scheduleSetRoom.has(keyRoom) ||
+      scheduleSetTeacher.has(keyTeacher) ||
+      scheduleSetSection.has(keySection)
+    ) {
+      continue
     }
+
+    scheduleSetRoom.add(keyRoom)
+    scheduleSetTeacher.add(keyTeacher)
+    scheduleSetSection.add(keySection)
+
+    scheduleList.push({
+      id: createId(),
+      day,
+      slotId: slot.id,
+      sectionId: section.id,
+      courseId: course.id,
+      teacherId: teacher.id,
+      roomId: room.id,
+      createdAt: now,
+      updatedAt: now,
+    })
   }
+
   await db.insert(classSchedule).values(scheduleList)
   return scheduleList
 }

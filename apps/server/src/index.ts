@@ -34,7 +34,7 @@ app.use(
   }),
 )
 
-new Cron("50 23 * * 5", () => {
+new Cron("50 23 * * 5", { timezone: "Asia/Dhaka" }, () => {
   generateWeeklyClassHistory()
 })
 

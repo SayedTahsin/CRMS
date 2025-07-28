@@ -10,6 +10,7 @@ import { permission, role, rolePermission, userRole } from "@/db/schema/pbac"
 import { room } from "@/db/schema/room"
 import { section } from "@/db/schema/section"
 import { slot } from "@/db/schema/slot"
+import { generateWeeklyClassHistory } from "@/lib/cron-function"
 import {
   seedClassSchedule,
   seedCourses,
@@ -85,7 +86,10 @@ async function seed() {
   const users = await seedUsersAndAccounts(db, sections, roles)
 
   console.log("Seeding class schedules...")
-  await seedClassSchedule(db, sections, courses, rooms, slots, users)
+  await seedClassSchedule(db, sections, courses, rooms, slots, users, roles)
+
+  console.log("Seeding class history...")
+  await generateWeeklyClassHistory()
 
   console.log("✅ Seeding completed!")
 }
