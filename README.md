@@ -117,7 +117,6 @@ bun db:push
 4. Populate data with `dizzle-seed`. 
 
 ```bash
-bun db:generate
 bun db:seed
 ```
 

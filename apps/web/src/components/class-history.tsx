@@ -16,6 +16,7 @@ import type { DateRange } from "react-day-picker"
 import { toast } from "sonner"
 import type { User } from "../store/slices/userSlice"
 import { DatePickerWithRange } from "./ui/date-picker-range"
+
 type OverviewType = "section" | "teacher" | "room"
 
 const ClassHistoryTable = ({ user }: { user: User }) => {
@@ -53,20 +54,17 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
         ? teachers
         : rooms
 
-  const [selectedId, setSelectedId] = useState<string>(
-    overview === "teacher"
-      ? user.id
-      : user.sectionId
-        ? user.sectionId
-        : overviewList.length > 0
-          ? overviewList[0].id
-          : "",
-  )
+  const [selectedId, setSelectedId] = useState(() => {
+    if (overview === "teacher") return user.id
+    if (overview === "section" && user.sectionId) return user.sectionId
+    if (overviewList.length > 0) return overviewList[0].id
+    return ""
+  })
 
   const today = new Date()
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: today,
-    to: today,
+    to: new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000),
   })
 
   const [editingCell, setEditingCell] = useState<{
@@ -121,7 +119,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
     refetch: refetchHistory,
   } = useQuery({
     ...trpc.classHistory.getByDate.queryOptions({ from, to }),
-    enabled: !!from,
+    enabled: !!from && !!selectedId,
   })
 
   const filteredHistory = selectedId
@@ -131,7 +129,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
         if (overview === "room") return item.roomId === selectedId
         return true
       })
-    : classHistory
+    : []
 
   const cellMap: Record<
     string,
@@ -222,7 +220,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                     : newOverview === "teacher"
                       ? teachers
                       : rooms
-                setSelectedId(newList[0]?.id ?? null)
+                setSelectedId(newList[0]?.id ?? "")
               }}
               className="rounded border bg-background px-2 py-1 text-foreground text-sm"
             >
@@ -245,11 +243,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
           </div>
         </div>
 
-        {isLoading ? (
-          <div className="text-center text-muted-foreground text-sm">
-            Loading...
-          </div>
-        ) : isError ? (
+        {isError ? (
           <div className="text-center text-red-500 text-sm">
             Failed to load data.
           </div>
@@ -271,7 +265,16 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
               </TableHeader>
 
               <TableBody>
-                {Object.entries(cellMap).length === 0 ? (
+                {!selectedId || isLoading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={slots.length + 1}
+                      className="py-3 text-center text-muted-foreground"
+                    >
+                      {isLoading ? "Loading..." : "Select an item to view data"}
+                    </TableCell>
+                  </TableRow>
+                ) : Object.entries(cellMap).length === 0 ? (
                   <TableRow>
                     <TableCell
                       colSpan={slots.length + 1}
@@ -289,6 +292,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
 
                       {slots.map((slot) => {
                         const entry = entries.find((e) => e.slotId === slot.id)
+
                         const isCreating =
                           !entry &&
                           editingCell?.slotId === slot.id &&
@@ -320,6 +324,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                             >
                               {isCreating ? (
                                 <div className="flex flex-col gap-1">
+                                  {/* Course */}
                                   <select
                                     value={newClassData.courseId}
                                     onChange={(e) =>
@@ -338,6 +343,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                                     ))}
                                   </select>
 
+                                  {/* Teacher */}
                                   <select
                                     value={newClassData.teacherId}
                                     onChange={(e) =>
@@ -356,6 +362,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                                     ))}
                                   </select>
 
+                                  {/* Room */}
                                   <select
                                     value={newClassData.roomId}
                                     onChange={(e) =>
