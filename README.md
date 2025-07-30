@@ -192,29 +192,30 @@ react-tanstack-router-hono-drizzle/
 ```
 
 ## Available Scripts
+```
+`npm run dev`: Start all applications in development mode (via Turbo)
+`npm run dev:web`: Start only the web application
+`npm run dev:server`: Start only the server application
+`npm run dev:native`: Start only the native application (if applicable)
 
-- `npm run dev`: Start all applications in development mode (via Turbo)
-- `npm run dev:web`: Start only the web application
-- `npm run dev:server`: Start only the server application
-- `npm run dev:native`: Start only the native application (if applicable)
+`npm run build`: Build all applications
+`npm run build:web`: Build only the web application
+`npm run build:server`: Build only the server application
 
-- `npm run build`: Build all applications
-- `npm run build:web`: Build only the web application
-- `npm run build:server`: Build only the server application
+`npm run start:web`: Start the web application
+`npm run start:server`: Start the server application
 
-- `npm run start:web`: Start the web application
-- `npm run start:server`: Start the server application
+`npm run check-types`: Check TypeScript types across all applications
+`npm run check-types:web`: Check types only in the web application
+`npm run check-types:server`: Check types only in the server application
 
-- `npm run check-types`: Check TypeScript types across all applications
-- `npm run check-types:web`: Check types only in the web application
-- `npm run check-types:server`: Check types only in the server application
+`npm run db:push`: Push schema changes to the database
+`npm run db:seed`: Seed the database
+`npm run db:studio`: Open the database studio UI
+`npm run db:migrate`: Run database migrations
+`npm run db:generate`: Generate database types and files
 
-- `npm run db:push`: Push schema changes to the database
-- `npm run db:seed`: Seed the database
-- `npm run db:studio`: Open the database studio UI
-- `npm run db:migrate`: Run database migrations
-- `npm run db:generate`: Generate database types and files
+`cd apps/server && bun db:local`: Start the local SQLite database (direct command)
 
-- `cd apps/server && bun db:local`: Start the local SQLite database (direct command)
-
-- `npm run check`: Run Biome formatting and linting across all applications
+`npm run check`: Run Biome formatting and linting across all applications
+```
