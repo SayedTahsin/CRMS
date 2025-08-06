@@ -311,7 +311,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                           return (
                             <TableCell
                               key={slot.id}
-                              className="cursor-pointer px-3 py-2 text-muted-foreground text-sm"
+                              className="cursor-pointer px-3 py-2 align-top text-muted-foreground text-sm"
                               onDoubleClick={() =>
                                 canCreate &&
                                 setEditingCell({
@@ -323,7 +323,7 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                               }
                             >
                               {isCreating ? (
-                                <div className="flex flex-col gap-1">
+                                <div className="flex max-w-[200px] flex-col gap-1 text-sm">
                                   {/* Course */}
                                   <select
                                     value={newClassData.courseId}
@@ -381,29 +381,40 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                                     ))}
                                   </select>
 
-                                  <Button
-                                    size="sm"
-                                    className="w-full"
-                                    onClick={() => {
-                                      if (
-                                        newClassData.courseId &&
-                                        newClassData.teacherId &&
-                                        newClassData.roomId
-                                      ) {
-                                        createClassHistory({
-                                          date,
-                                          slotId: slot.id,
-                                          sectionId: selectedId,
-                                          ...newClassData,
-                                        })
-                                      } else {
-                                        toast.error("All fields are required")
-                                      }
-                                    }}
-                                    disabled={isClassCreating}
-                                  >
-                                    Save
-                                  </Button>
+                                  <div className="flex gap-1">
+                                    <Button
+                                      size="sm"
+                                      className="px-2 py-1"
+                                      onClick={() => {
+                                        if (
+                                          newClassData.courseId &&
+                                          newClassData.teacherId &&
+                                          newClassData.roomId
+                                        ) {
+                                          createClassHistory({
+                                            date,
+                                            slotId: slot.id,
+                                            sectionId: selectedId,
+                                            ...newClassData,
+                                          })
+                                        } else {
+                                          toast.error("All fields are required")
+                                        }
+                                      }}
+                                      disabled={isClassCreating}
+                                    >
+                                      Save
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="px-2 py-1"
+                                      onClick={() => setEditingCell(null)}
+                                      disabled={isClassCreating}
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </div>
                                 </div>
                               ) : (
                                 "-"

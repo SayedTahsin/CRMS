@@ -84,6 +84,16 @@ const ClassScheduleTable = () => {
     }),
   )
 
+  const { mutate: deleteSchedule, isPending: isDeleting } = useMutation(
+    trpc.classSchedule.delete.mutationOptions({
+      onSuccess: () => {
+        toast.success("Schedule deleted!")
+        refetch()
+        setEditingCell(null)
+      },
+      onError: (err) => toast.error(handleErrorMsg(err)),
+    }),
+  )
   const { mutate: updateSchedule, isPending: isUpdating } = useMutation(
     trpc.classSchedule.update.mutationOptions({
       onSuccess: () => {
@@ -191,7 +201,7 @@ const ClassScheduleTable = () => {
                             title={item ? undefined : "Double click to add"}
                           >
                             {isEditing ? (
-                              <div className="flex flex-col space-y-1">
+                              <div className="flex min-w-[200px] flex-col space-y-1">
                                 <select
                                   value={editFormData.courseId}
                                   onChange={(e) =>
@@ -200,7 +210,7 @@ const ClassScheduleTable = () => {
                                       courseId: e.target.value,
                                     }))
                                   }
-                                  className="w-full rounded border border-input bg-background p-1 text-sm"
+                                  className="w-full min-w-[180px] rounded border border-input bg-background p-1 text-sm"
                                 >
                                   <option value="">Select course</option>
                                   {courses.map(({ id, title }) => (
@@ -218,7 +228,7 @@ const ClassScheduleTable = () => {
                                       teacherId: e.target.value,
                                     }))
                                   }
-                                  className="w-full rounded border border-input bg-background p-1 text-sm"
+                                  className="w-full min-w-[180px] rounded border border-input bg-background p-1 text-sm"
                                 >
                                   <option value="">Select teacher</option>
                                   {teachers?.map(({ id, name }) => (
@@ -236,7 +246,7 @@ const ClassScheduleTable = () => {
                                       roomId: e.target.value,
                                     }))
                                   }
-                                  className="w-full rounded border border-input bg-background p-1 text-sm"
+                                  className="w-full min-w-[180px] rounded border border-input bg-background p-1 text-sm"
                                 >
                                   <option value="">Select room</option>
                                   {rooms.map(({ id, name }) => (
@@ -246,14 +256,41 @@ const ClassScheduleTable = () => {
                                   ))}
                                 </select>
 
-                                <Button
-                                  size="sm"
-                                  className="mt-1 w-full"
-                                  onClick={handleCellUpdate}
-                                  disabled={isCreating || isUpdating}
-                                >
-                                  Save
-                                </Button>
+                                <div className="mt-1 flex min-w-[180px] flex-wrap justify-start gap-2">
+                                  <Button
+                                    size="sm"
+                                    onClick={handleCellUpdate}
+                                    disabled={isCreating || isUpdating}
+                                  >
+                                    Save
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setEditingCell(null)
+                                      SetIsNewSchedule(false)
+                                    }}
+                                  >
+                                    Cancel
+                                  </Button>
+                                  {!isNewSchedule && (
+                                    <Button
+                                      size="sm"
+                                      variant="destructive"
+                                      onClick={() => {
+                                        if (!editingCell) return
+                                        deleteSchedule({
+                                          day: editingCell.day.toLowerCase() as WeekDay,
+                                          slotId: editingCell.slotId,
+                                        })
+                                      }}
+                                      disabled={isDeleting}
+                                    >
+                                      Delete
+                                    </Button>
+                                  )}
+                                </div>
                               </div>
                             ) : item ? (
                               <div className="space-y-0.5 whitespace-nowrap text-sm">
