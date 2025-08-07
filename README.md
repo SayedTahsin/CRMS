@@ -193,29 +193,29 @@ react-tanstack-router-hono-drizzle/
 
 ## Available Scripts
 ```
-`npm run dev`: Start all applications in development mode (via Turbo)
-`npm run dev:web`: Start only the web application
-`npm run dev:server`: Start only the server application
-`npm run dev:native`: Start only the native application (if applicable)
+`bun dev`: Start all applications in development mode (via Turbo)
+`bun dev:web`: Start only the web application
+`bun dev:server`: Start only the server application
+`bun dev:native`: Start only the native application (if applicable)
 
-`npm run build`: Build all applications
-`npm run build:web`: Build only the web application
-`npm run build:server`: Build only the server application
+`bun build`: Build all applications
+`bun build:web`: Build only the web application
+`bun build:server`: Build only the server application
 
-`npm run start:web`: Start the web application
-`npm run start:server`: Start the server application
+`bun start:web`: Start the web application
+`bun start:server`: Start the server application
 
-`npm run check-types`: Check TypeScript types across all applications
-`npm run check-types:web`: Check types only in the web application
-`npm run check-types:server`: Check types only in the server application
+`bun check-types`: Check TypeScript types across all applications
+`bun check-types:web`: Check types only in the web application
+`bun check-types:server`: Check types only in the server application
 
-`npm run db:push`: Push schema changes to the database
-`npm run db:seed`: Seed the database
-`npm run db:studio`: Open the database studio UI
-`npm run db:migrate`: Run database migrations
-`npm run db:generate`: Generate database types and files
+`bun db:push`: Push schema changes to the database
+`bun db:seed`: Seed the database
+`bun db:studio`: Open the database studio UI
+`bun db:migrate`: Run database migrations
+`bun db:generate`: Generate database types and files
 
 `cd apps/server && bun db:local`: Start the local SQLite database (direct command)
 
-`npm run check`: Run Biome formatting and linting across all applications
+`bun check`: Run Biome formatting and linting across all applications
 ```
