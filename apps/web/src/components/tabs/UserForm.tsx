@@ -2,6 +2,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -92,38 +99,44 @@ const UserForm = () => {
             }}
             className="min-w-0 flex-1"
           />
-
-          <select
+          {/* Section Filter */}
+          <Select
             value={sectionFilter}
-            onChange={(e) => {
-              setSectionFilter(e.target.value)
+            onValueChange={(value) => {
+              setSectionFilter(value)
               setPage(1)
             }}
-            className="rounded border border-input bg-background px-2 py-1 text-foreground text-sm"
           >
-            <option value="">All Sections</option>
-            {sections?.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-
-          <select
+            <SelectTrigger className="w-[130px] text-sm">
+              <SelectValue placeholder="All Sections" />
+            </SelectTrigger>
+            <SelectContent>
+              {sections?.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {/* Role Filter */}
+          <Select
             value={roleFilter}
-            onChange={(e) => {
-              setRoleFilter(e.target.value)
+            onValueChange={(value) => {
+              setRoleFilter(value)
               setPage(1)
             }}
-            className="rounded border border-input bg-background px-2 py-1 text-foreground text-sm"
           >
-            <option value="">All Roles</option>
-            {roles?.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-[120px] text-sm">
+              <SelectValue placeholder="All Roles" />
+            </SelectTrigger>
+            <SelectContent>
+              {roles?.map((r) => (
+                <SelectItem key={r.id} value={r.id}>
+                  {r.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Table className="text-sm">
@@ -185,19 +198,23 @@ const UserForm = () => {
                   >
                     {editingCell?.userId === user.id &&
                     editingCell.field === "roleId" ? (
-                      <select
+                      <Select
                         defaultValue={user.roleId ?? ""}
-                        onBlur={(e) =>
-                          handleUpdate(user.id, "roleId", e.target.value)
+                        onValueChange={(value) =>
+                          handleUpdate(user.id, "roleId", value)
                         }
-                        className="w-full rounded border border-input bg-background px-2 py-1 text-foreground text-sm"
                       >
-                        {roles?.map((role) => (
-                          <option key={role.id} value={role.id}>
-                            {role.name}
-                          </option>
-                        ))}
-                      </select>
+                        <SelectTrigger className="text-sm">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {roles?.map((role) => (
+                            <SelectItem key={role.id} value={role.id}>
+                              {role.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     ) : (
                       roles?.find((r) => r.id === user.roleId)?.name || "-"
                     )}

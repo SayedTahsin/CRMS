@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -204,15 +211,9 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
           <DatePickerWithRange date={dateRange} onDateChange={setDateRange} />
 
           <div className="flex items-end gap-2">
-            <label htmlFor="overview-select" className="font-medium text-sm">
-              Overview of:
-            </label>
-
-            <select
-              id="overview-select"
+            <Select
               value={overview}
-              onChange={(e) => {
-                const newOverview = e.target.value as OverviewType
+              onValueChange={(newOverview: OverviewType) => {
                 setOverview(newOverview)
                 const newList =
                   newOverview === "section"
@@ -222,24 +223,32 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                       : rooms
                 setSelectedId(newList[0]?.id ?? "")
               }}
-              className="rounded border bg-background px-2 py-1 text-foreground text-sm"
             >
-              <option value="section">Section</option>
-              <option value="teacher">Teacher</option>
-              <option value="room">Room</option>
-            </select>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Select overview" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="section">Section</SelectItem>
+                <SelectItem value="teacher">Teacher</SelectItem>
+                <SelectItem value="room">Room</SelectItem>
+              </SelectContent>
+            </Select>
 
-            <select
+            <Select
               value={selectedId ?? ""}
-              onChange={(e) => setSelectedId(e.target.value)}
-              className="rounded border bg-background px-2 py-1 text-foreground text-sm"
+              onValueChange={(value) => setSelectedId(value)}
             >
-              {overviewList.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name ?? item.title ?? "Unnamed"}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-[200px] text-sm">
+                <SelectValue placeholder="Select an option" />
+              </SelectTrigger>
+              <SelectContent>
+                {overviewList.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.name ?? item.title ?? "Unnamed"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -323,64 +332,70 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                               }
                             >
                               {isCreating ? (
-                                <div className="flex max-w-[200px] flex-col gap-1 text-sm">
+                                <div className="flex flex-col gap-1 text-sm">
                                   {/* Course */}
-                                  <select
+                                  <Select
                                     value={newClassData.courseId}
-                                    onChange={(e) =>
+                                    onValueChange={(value) =>
                                       setNewClassData((prev) => ({
                                         ...prev,
-                                        courseId: e.target.value,
+                                        courseId: value,
                                       }))
                                     }
-                                    className="rounded border bg-background px-2 py-1 text-foreground text-sm"
                                   >
-                                    <option value="">Select Course</option>
-                                    {courses.map((c) => (
-                                      <option key={c.id} value={c.id}>
-                                        {c.title}
-                                      </option>
-                                    ))}
-                                  </select>
-
+                                    <SelectTrigger className="w-[200px] text-sm">
+                                      <SelectValue placeholder="Select Course" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {courses.map((c) => (
+                                        <SelectItem key={c.id} value={c.id}>
+                                          {c.title}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                   {/* Teacher */}
-                                  <select
+                                  <Select
                                     value={newClassData.teacherId}
-                                    onChange={(e) =>
+                                    onValueChange={(value) =>
                                       setNewClassData((prev) => ({
                                         ...prev,
-                                        teacherId: e.target.value,
+                                        teacherId: value,
                                       }))
                                     }
-                                    className="rounded border bg-background px-2 py-1 text-foreground text-sm"
                                   >
-                                    <option value="">Select Teacher</option>
-                                    {teachers.map((t) => (
-                                      <option key={t.id} value={t.id}>
-                                        {t.name}
-                                      </option>
-                                    ))}
-                                  </select>
-
+                                    <SelectTrigger className="w-[200px] text-sm">
+                                      <SelectValue placeholder="Select Teacher" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {teachers.map((t) => (
+                                        <SelectItem key={t.id} value={t.id}>
+                                          {t.name}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                   {/* Room */}
-                                  <select
+                                  <Select
                                     value={newClassData.roomId}
-                                    onChange={(e) =>
+                                    onValueChange={(value) =>
                                       setNewClassData((prev) => ({
                                         ...prev,
-                                        roomId: e.target.value,
+                                        roomId: value,
                                       }))
                                     }
-                                    className="rounded border bg-background px-2 py-1 text-foreground text-sm"
                                   >
-                                    <option value="">Select Room</option>
-                                    {rooms.map((r) => (
-                                      <option key={r.id} value={r.id}>
-                                        {r.name}
-                                      </option>
-                                    ))}
-                                  </select>
-
+                                    <SelectTrigger className="w-[200px] text-sm">
+                                      <SelectValue placeholder="Select Room" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {rooms.map((r) => (
+                                        <SelectItem key={r.id} value={r.id}>
+                                          {r.name}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                   <div className="flex gap-1">
                                     <Button
                                       size="sm"
@@ -429,9 +444,9 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                         const room = getName(rooms, entry.roomId)
 
                         const statusBg: Record<typeof entry.status, string> = {
-                          delivered: "bg-green-700",
-                          rescheduled: "bg-yellow-700",
-                          notdelivered: "bg-red-700",
+                          delivered: "bg-emerald-600 dark:bg-emerald-900",
+                          rescheduled: "bg-orange-400 dark:bg-orange-700",
+                          notdelivered: "bg-rose-400 dark:bg-rose-900",
                         }
 
                         return (
@@ -450,28 +465,36 @@ const ClassHistoryTable = ({ user }: { user: User }) => {
                           >
                             {isEditing ? (
                               <div className="flex flex-col gap-1">
-                                <select
+                                <Select
                                   value={entry.status}
-                                  onChange={(e) =>
+                                  onValueChange={(
+                                    value:
+                                      | "delivered"
+                                      | "notdelivered"
+                                      | "rescheduled",
+                                  ) =>
                                     updateClassHistoryStatus({
                                       id: entry.id,
-                                      status: e.target.value as
-                                        | "delivered"
-                                        | "notdelivered"
-                                        | "rescheduled",
+                                      status: value,
                                       sectionId: entry.sectionId,
                                     })
                                   }
-                                  className="rounded border bg-background px-2 py-1 text-foreground text-sm"
                                 >
-                                  <option value="delivered">Delivered</option>
-                                  <option value="notdelivered">
-                                    Not Delivered
-                                  </option>
-                                  <option value="rescheduled">
-                                    Rescheduled
-                                  </option>
-                                </select>
+                                  <SelectTrigger className="w-[150px] text-sm">
+                                    <SelectValue placeholder="Select status" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="delivered">
+                                      Delivered
+                                    </SelectItem>
+                                    <SelectItem value="notdelivered">
+                                      Not Delivered
+                                    </SelectItem>
+                                    <SelectItem value="rescheduled">
+                                      Rescheduled
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
 
                                 <Button
                                   size="sm"

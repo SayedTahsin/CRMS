@@ -1,4 +1,11 @@
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { trpc } from "@/utils/trpc"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
@@ -121,6 +128,20 @@ const ReportTab = () => {
   const dependencyError =
     teachersError || coursesError || sectionsError || slotsError
 
+  const placeholderText =
+    reportType === "teacher"
+      ? "Select teacher"
+      : reportType === "course"
+        ? "Select course"
+        : "Select section"
+
+  const items =
+    reportType === "teacher"
+      ? teachers
+      : reportType === "course"
+        ? courses
+        : sections
+
   return (
     <Card>
       <CardContent className="space-y-4">
@@ -160,35 +181,25 @@ const ReportTab = () => {
             ) : dependencyError ? (
               <p className="text-red-600 text-sm">Failed to load options.</p>
             ) : (
-              <select
+              <Select
                 value={selectedId}
-                onChange={(e) => setSelectedId(e.target.value)}
-                className="w-full rounded border border-input bg-background px-3 py-2 text-foreground text-sm"
+                onValueChange={(value) => setSelectedId(value)}
               >
-                <option value="">
-                  {`Select ${
-                    reportType === "teacher"
-                      ? "teacher"
-                      : reportType === "course"
-                        ? "course"
-                        : "section"
-                  }`}
-                </option>
-                {(reportType === "teacher"
-                  ? teachers
-                  : reportType === "course"
-                    ? courses
-                    : sections
-                )?.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {"name" in item
-                      ? item.name
-                      : "title" in item
-                        ? item.title
-                        : ""}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-[350px] text-sm">
+                  <SelectValue placeholder={placeholderText} />
+                </SelectTrigger>
+                <SelectContent>
+                  {items?.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      {"name" in item
+                        ? item.name
+                        : "title" in item
+                          ? item.title
+                          : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             )}
           </div>
 

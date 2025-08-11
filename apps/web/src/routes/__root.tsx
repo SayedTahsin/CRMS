@@ -51,7 +51,7 @@ function RootComponent() {
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <div className="grid h-svh grid-rows-[auto_1fr]">
           <Header />
-          {isFetching ? <Loader /> : <Outlet />}
+          <div className="m-2">{isFetching ? <Loader /> : <Outlet />}</div>
         </div>
         <Toaster richColors />
       </ThemeProvider>
