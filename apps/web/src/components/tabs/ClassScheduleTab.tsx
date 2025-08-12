@@ -2,6 +2,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -202,60 +209,69 @@ const ClassScheduleTable = () => {
                           >
                             {isEditing ? (
                               <div className="flex min-w-[200px] flex-col space-y-1">
-                                <select
+                                {/* Course */}
+                                <Select
                                   value={editFormData.courseId}
-                                  onChange={(e) =>
+                                  onValueChange={(value) =>
                                     setEditFormData((prev) => ({
                                       ...prev,
-                                      courseId: e.target.value,
+                                      courseId: value,
                                     }))
                                   }
-                                  className="w-full min-w-[180px] rounded border border-input bg-background p-1 text-sm"
                                 >
-                                  <option value="">Select course</option>
-                                  {courses.map(({ id, title }) => (
-                                    <option key={id} value={id}>
-                                      {title}
-                                    </option>
-                                  ))}
-                                </select>
-
-                                <select
+                                  <SelectTrigger className="w-full min-w-[180px] text-sm">
+                                    <SelectValue placeholder="Select course" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {courses.map(({ id, title }) => (
+                                      <SelectItem key={id} value={id}>
+                                        {title}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                {/* Teacher */}
+                                <Select
                                   value={editFormData.teacherId}
-                                  onChange={(e) =>
+                                  onValueChange={(value) =>
                                     setEditFormData((prev) => ({
                                       ...prev,
-                                      teacherId: e.target.value,
+                                      teacherId: value,
                                     }))
                                   }
-                                  className="w-full min-w-[180px] rounded border border-input bg-background p-1 text-sm"
                                 >
-                                  <option value="">Select teacher</option>
-                                  {teachers?.map(({ id, name }) => (
-                                    <option key={id} value={id}>
-                                      {name}
-                                    </option>
-                                  ))}
-                                </select>
-
-                                <select
+                                  <SelectTrigger className="w-full min-w-[180px] text-sm">
+                                    <SelectValue placeholder="Select teacher" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {teachers?.map(({ id, name }) => (
+                                      <SelectItem key={id} value={id}>
+                                        {name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                {/* Room */}
+                                <Select
                                   value={editFormData.roomId}
-                                  onChange={(e) =>
+                                  onValueChange={(value) =>
                                     setEditFormData((prev) => ({
                                       ...prev,
-                                      roomId: e.target.value,
+                                      roomId: value,
                                     }))
                                   }
-                                  className="w-full min-w-[180px] rounded border border-input bg-background p-1 text-sm"
                                 >
-                                  <option value="">Select room</option>
-                                  {rooms.map(({ id, name }) => (
-                                    <option key={id} value={id}>
-                                      {name}
-                                    </option>
-                                  ))}
-                                </select>
-
+                                  <SelectTrigger className="w-full min-w-[180px] text-sm">
+                                    <SelectValue placeholder="Select room" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {rooms.map(({ id, name }) => (
+                                      <SelectItem key={id} value={id}>
+                                        {name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
                                 <div className="mt-1 flex min-w-[180px] flex-wrap justify-start gap-2">
                                   <Button
                                     size="sm"

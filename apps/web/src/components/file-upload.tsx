@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { handleErrorMsg } from "@/utils/error-msg"
 import { trpc } from "@/utils/trpc"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -98,22 +105,24 @@ export const FileUploadCell = ({
           <label htmlFor="course-select" className="font-medium text-sm">
             Select Course
           </label>
-          <select
-            id="course-select"
+          <Select
             value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className="rounded border bg-background px-2 py-2 text-foreground text-sm"
+            onValueChange={(value) => setSelectedCourse(value)}
           >
-            <option value="" disabled>
-              -- Select a course --
-            </option>
-            <option value="random">Random</option>
-            {coursesResult.data.map((course: { id: string; title: string }) => (
-              <option key={course.id} value={course.title}>
-                {course.title}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-[250px] text-sm">
+              <SelectValue placeholder="-- Select a course --" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="random">Random</SelectItem>
+              {coursesResult.data.map(
+                (course: { id: string; title: string }) => (
+                  <SelectItem key={course.id} value={course.title}>
+                    {course.title}
+                  </SelectItem>
+                ),
+              )}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

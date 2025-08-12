@@ -3,6 +3,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -221,18 +228,28 @@ const CourseForm = ({ userRoleName }: AdminTabProps) => {
             onChange={(e) => handleSearchChange(e.target.value)}
             className="w-full"
           />
-          <select
-            value={creditFilter !== null ? creditFilter.toString() : ""}
-            onChange={(e) => handleCreditFilterChange(e.target.value)}
-            className="w-40 rounded-md border bg-background p-2 text-foreground text-sm"
+          <Select
+            value={creditFilter !== null ? creditFilter.toString() : "all"}
+            onValueChange={(value) => {
+              if (value === "all") {
+                handleCreditFilterChange("")
+              } else {
+                handleCreditFilterChange(value)
+              }
+            }}
           >
-            <option value="">All Credits</option>
-            {[1, 2, 3, 4].map((c) => (
-              <option key={c} value={c}>
-                {c} Credit{c > 1 && "s"}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-[250px] text-sm">
+              <SelectValue placeholder="All Credits" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Credits</SelectItem>
+              {[1, 2, 3, 4].map((c) => (
+                <SelectItem key={c} value={c.toString()}>
+                  {c} Credit{c > 1 && "s"}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="rounded-md border">

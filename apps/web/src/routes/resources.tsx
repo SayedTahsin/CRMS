@@ -2,6 +2,13 @@ import Loader from "@/components/loader"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { authGuard } from "@/utils/auth-guard"
 import { trpc } from "@/utils/trpc"
 import { useQuery } from "@tanstack/react-query"
@@ -67,19 +74,21 @@ function RouteComponent() {
           Filter by Course:
         </label>
 
-        <select
-          id="course-select"
+        <Select
           value={selectedCourse}
-          onChange={(e) => setSelectedCourse(e.target.value)}
-          className="rounded border bg-background px-2 py-1 text-foreground text-sm"
+          onValueChange={(value) => setSelectedCourse(value)}
         >
-          <option value="">All Courses</option>
-          {courseNames.map((name) => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-[200px] text-sm">
+            <SelectValue placeholder="All Courses" />
+          </SelectTrigger>
+          <SelectContent>
+            {courseNames.map((name) => (
+              <SelectItem key={name} value={name}>
+                {name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <Card>
