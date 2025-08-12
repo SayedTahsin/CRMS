@@ -4,34 +4,22 @@ A full-stack academic scheduling and analytics platform with inline editable tab
 
 ---
 
-## 🌟 Overview
+## 🌟 Features & Highlights
 
 This project is a real-world, production-ready education management platform featuring:
 
-- End-to-end typesafe communication via tRPC  
-- Fine-grained permission control (PBAC)  
-- Inline class history editing and creation
-- Upload, view, and manage files (PDFs, images, etc.) with Supabase Storage
-- Date- and role-based filters for tracking  
-- Fully responsive, component-driven UI  
-- Scheduled cron jobs for weekly analytics  
-- Optimized developer experience with Bun, Biome, and modular structure
-
-Ideal for schools, universities, or teams building robust, role-aware class scheduling and tracking tools.
-
----
-
-## 💡 Tech Highlights
-
-- 🔄 Typesafe data flow across frontend and backend using tRPC + TypeScript  
-- 🧑‍🏫 Permission-Based Access Control (PBAC) – scoped actions by role  
-- ✏️ Inline editing of schedule entries via double-click  
-- 📅 Slot × Date Matrix – intuitive view of classes and gaps  
-- 📊 Class history analytics – track per teacher, section, or room  
-- 📨 Email verification & password reset via Resend  
-- 🗂️ Resource Management – Upload, view, and delete files with secure Supabase Storage (S3 compatible)
-- ⚡ Blazing-fast dev environment with Bun and SQLite  
-- 🧩 Modular architecture – clean, scalable, and maintainable  
+- 🔄 **End-to-end typesafe communication:** Built with tRPC and TypeScript for seamless frontend-backend integration  
+- 🧑‍🏫 **Permission-Based Access Control (PBAC):** Fine-grained permission rules based on user roles and ownership, enforcing scoped access with middleware guards to protect routes and API endpoints  
+- 🔐 **Better Authentication:** Supports email/password login, passkey authentication, email verification, and password reset workflows  
+- 📨 **Resend Integration:** Reliable SMTP email delivery powering verification, password resets, and other auth-related emails  
+- 📅 **Slot × Date Matrix:** Intuitive calendar-style view displaying classes and free slots across days  
+- ✏️ **Inline Editing:** Edit class schedules directly via double-click on entries for quick updates  
+- 📊 **Class History Analytics:** Track performance and generate detailed reports by teacher, section, or room  
+- 🗂️ **Resource Management:** Upload, view, and securely manage files (PDFs, images) using Supabase Storage (S3 compatible)  
+- 🎨 **Modern UI:** Powered by TailwindCSS, Shadcn UI components, and tweakcn for consistent theming and responsive design  
+- ⚡ **Optimized Dev Environment:** Fast development experience with Bun runtime, Biome linter, SQLite database, and modular architecture  
+- ⏰ **Scheduled Cron Jobs:** Automated weekly class generation and analytics processing  
+- 🧩 **Modular & Scalable:** Clean architecture designed for maintainability and future growth  
 
 ---
 
@@ -42,8 +30,8 @@ Ideal for schools, universities, or teams building robust, role-aware class sche
 - **React** – Component-driven, declarative UI  
 - **TypeScript** – Static typing across the stack  
 - **TanStack Router** – Nested, type-safe routing  
-- **TailwindCSS** – Utility-first CSS framework  
-- **shadcn/ui** – Accessible components with Radix UI  
+- **TailwindCSS + tweakcn** – Utility-first CSS framework with tweakcn for theme management of shadcn/ui components
+- **shadcn/ui** – Accessible components with Radix UI
 - **TanStack Query** – Data synchronization with caching  
 - **Redux** – Global state management for auth/user state  
 
@@ -63,18 +51,6 @@ Ideal for schools, universities, or teams building robust, role-aware class sche
 - **Resend** – SMTP email delivery for auth workflows  
 - **Middleware-based Guarding** – Centralized route protection  
 - **Role-Based UI Logic** – UI adjusts to SuperAdmin, Teacher, CR, etc.  
-
----
-
-## 📊 Functionality
-
-- 🔍 **Date-Range Filtering** – Select and filter class history over time  
-- ✏️ **Inline Table Editing** – Create/edit class info directly in table view  
-- 🧩 **Slot × Date Matrix** – Visually map classes in a clean grid  
-- 🧠 **Teacher / Section / Room Analytics** – Filter data by overview  
-- 🕐 **Weekly Cron Jobs** – Background processing with `Croner`  
-- 🧼 **Zero-Runtime Type Errors** – Through TRPC + TypeScript contracts  
-- 🗃️ **Resource Uploads** – Upload PDFs or images scoped to a course
 
 ---
 

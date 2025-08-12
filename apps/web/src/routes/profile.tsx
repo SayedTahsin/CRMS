@@ -39,7 +39,7 @@ function ProfilePage() {
   const isAdmin = ["SuperAdmin", "Chairman", "Teacher"].includes(userRoleName)
   const { data: sectiones } = useQuery(trpc.section.getAll.queryOptions())
 
-  const { register, handleSubmit, reset, watch, control } = useForm({
+  const { register, handleSubmit, reset, watch, control, setValue } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -67,6 +67,10 @@ function ProfilePage() {
     }
   }, [user, reset])
 
+  const setSectionId = (value: string) => {
+    if (value) setValue("sectionId", value)
+  }
+
   const updateUser = useMutation(
     trpc.user.update.mutationOptions({
       onSuccess: () => {
@@ -75,12 +79,12 @@ function ProfilePage() {
       onError: (error) => {
         toast.error(handleErrorMsg(error))
       },
-    }),
+    })
   )
 
   const onSubmit = handleSubmit((data) => {
     const updatedData = Object.fromEntries(
-      Object.entries(data).filter(([_, value]) => value !== ""),
+      Object.entries(data).filter(([_, value]) => value !== "")
     )
     updateUser.mutate({
       ...updatedData,
@@ -167,7 +171,7 @@ function ProfilePage() {
                   render={({ field }) => (
                     <Select
                       value={field.value || ""}
-                      onValueChange={field.onChange}
+                      onValueChange={setSectionId}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select Section" />
