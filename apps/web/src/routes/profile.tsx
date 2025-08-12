@@ -4,6 +4,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { authClient } from "@/lib/auth-client"
 import { authGuard } from "@/utils/auth-guard"
@@ -15,7 +22,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { AlertCircle, BadgeCheck } from "lucide-react"
 import { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 export const Route = createFileRoute("/profile")({
@@ -32,7 +39,7 @@ function ProfilePage() {
   const isAdmin = ["SuperAdmin", "Chairman", "Teacher"].includes(userRoleName)
   const { data: sectiones } = useQuery(trpc.section.getAll.queryOptions())
 
-  const { register, handleSubmit, reset, watch } = useForm({
+  const { register, handleSubmit, reset, watch, control } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -154,18 +161,27 @@ function ProfilePage() {
 
               <div>
                 <Label htmlFor="sectionId">Section</Label>
-                <select
-                  id="sectionId"
-                  {...register("sectionId")}
-                  className="w-full rounded-md border border-input bg-background p-2 text-foreground text-sm"
-                >
-                  <option value="">Select Section</option>
-                  {sectiones?.map((section) => (
-                    <option key={section.id} value={section.id}>
-                      {section.name}
-                    </option>
-                  ))}
-                </select>
+                <Controller
+                  name="sectionId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value || ""}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Section" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {sectiones?.map((section) => (
+                          <SelectItem key={section.id} value={section.id}>
+                            {section.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
 
               <div className="flex flex-wrap items-center gap-2 pt-2">

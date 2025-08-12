@@ -3,6 +3,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -96,10 +103,8 @@ const SectionForm = ({ userRoleName }: AdminTabProps) => {
     createSection.mutate(data)
   })
 
-  const handleSectionSelect = async (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const sectionId = e.target.value
+  const handleSectionSelect = async (value: string) => {
+    const sectionId = value
     setSelectedSectionId(sectionId)
 
     const sectionName = sectiones?.find((b) => b.id === sectionId)?.name ?? ""
@@ -128,10 +133,10 @@ const SectionForm = ({ userRoleName }: AdminTabProps) => {
       <CardContent className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
           {(isChairman || isSuperAdmin) && (
-            <form onSubmit={onSubmit} className="space-y-2">
+            <form onSubmit={onSubmit} className="">
               <Label htmlFor="name">Create New Section</Label>
               <Input id="name" {...register("name", { required: true })} />
-              <Button type="submit" className="w-full sm:w-auto">
+              <Button type="submit" className="mt-2 w-full sm:w-auto">
                 Create
               </Button>
             </form>
@@ -139,19 +144,21 @@ const SectionForm = ({ userRoleName }: AdminTabProps) => {
 
           <div>
             <Label htmlFor="section-select">Select Existing Section</Label>
-            <select
-              id="section-select"
-              className="mt-1 w-full rounded-md border border-input bg-background p-2 text-foreground text-sm"
-              onChange={handleSectionSelect}
+            <Select
               value={selectedSectionId}
+              onValueChange={(value) => handleSectionSelect(value)}
             >
-              <option value="">Select a section</option>
-              {sectiones?.map((section) => (
-                <option key={section.id} value={section.id}>
-                  {section.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-[200px] text-sm">
+                <SelectValue placeholder="Select Section" />
+              </SelectTrigger>
+              <SelectContent>
+                {sectiones?.map((section) => (
+                  <SelectItem key={section.id} value={section.id}>
+                    {section.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

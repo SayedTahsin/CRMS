@@ -2,6 +2,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -15,7 +22,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { useDebounce } from "@uidotdev/usehooks"
 import { Trash2 } from "lucide-react"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Input } from "../ui/input"
 
@@ -34,9 +41,9 @@ const PBACForm = () => {
   }
 
   const {
-    register: registerRolePermission,
     handleSubmit: handleRolePermissionSubmit,
     reset: resetRolePermission,
+    control: controlRolePermission,
   } = useForm({
     defaultValues: {
       roleId: "",
@@ -164,11 +171,9 @@ const PBACForm = () => {
                       className="cursor-pointer space-y-1"
                     >
                       {editingUserId === u.id ? (
-                        <select
-                          defaultValue=""
-                          className="w-full rounded bg-background p-1 text-sm"
-                          onBlur={(e) => {
-                            const newRoleId = e.target.value
+                        <Select
+                          onValueChange={(value) => {
+                            const newRoleId = value
                             if (newRoleId) {
                               assignUserRole.mutate({
                                 userId: u.id,
@@ -178,13 +183,17 @@ const PBACForm = () => {
                             setEditingUserId(null)
                           }}
                         >
-                          <option value="">Select role to assign</option>
-                          {roles?.map((r) => (
-                            <option key={r.id} value={r.id}>
-                              {r.name}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue placeholder="Select Role" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {roles?.map((r) => (
+                              <SelectItem key={r.id} value={r.id}>
+                                {r.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       ) : (
                         <div className="flex flex-wrap gap-1">
                           {assignedRoles.length > 0 ? (
@@ -267,35 +276,53 @@ const PBACForm = () => {
           >
             <div>
               <Label htmlFor="rolePermission-role">Role</Label>
-              <select
-                id="rolePermission-role"
-                {...registerRolePermission("roleId", { required: true })}
-                className="w-full rounded bg-background p-1 text-sm"
-              >
-                <option value="">Select role</option>
-                {roles?.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                name="roleId"
+                control={controlRolePermission}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    value={field.value || ""}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="w-full rounded bg-background p-1 text-sm">
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {roles?.map((r) => (
+                        <SelectItem key={r.id} value={r.id}>
+                          {r.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </div>
             <div>
               <Label htmlFor="permission">Permission</Label>
-              <select
-                id="permission"
-                {...registerRolePermission("permissionId", {
-                  required: true,
-                })}
-                className="w-full rounded bg-background p-1 text-sm"
-              >
-                <option value="">Select permission</option>
-                {permissions?.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                name="permissionId"
+                control={controlRolePermission}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    value={field.value || ""}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="w-full rounded bg-background p-1 text-sm">
+                      <SelectValue placeholder="Select permission" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {permissions?.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          {p.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </div>
             <div className="sm:col-span-2">
               <Button type="submit">Assign Permission</Button>
